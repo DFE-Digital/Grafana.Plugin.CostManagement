@@ -13,13 +13,15 @@ jobs:
       # GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
       # GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
+      - run: echo ${GITHUB_WORKSPACE}
       - uses: actions/checkout@v3
       - name: Setup Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '20.9.0'
           cache: 'npm'
-          cache-dependency-path: ../../dfe-azurecostbackend-datasource/package-lock.json
+          #cache-dependency-path: ../../dfe-azurecostbackend-datasource/package-lock.json
+
 
       - name: Setup Go environment
         uses: actions/setup-go@v3
