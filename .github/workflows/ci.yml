@@ -23,13 +23,14 @@ jobs:
           if [ -n "$DIRECTORY" ]; then
             echo "Directory found: $DIRECTORY"
             cd $DIRECTORY
+            pwd
           else
             echo "Directory not found"
             exit 1
           fi
 
-      - name: Change Directory
-        run: cd Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+      #- name: Change Directory
+      #  run: cd Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
       - name: Install dependencies
         run: npm install
       - name: Install dependencies (using npm ci)
