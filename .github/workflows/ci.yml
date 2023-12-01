@@ -29,20 +29,31 @@ jobs:
             exit 1
           fi
 
-      - name: Change Directory
-        run: cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
-      - name: Install dependencies
-        run: npm install
-      - name: Install dependencies (using npm ci)
-        run: npm ci
-      - name: Check types
-        run: npm run typecheck
-      - name: Lint
-        run: npm run lint
-      - name: Unit tests
-        run: npm run test:ci
-      - name: Build frontend
-        run: npm run build
+          - name: Install dependencies and run npm commands
+          run: |
+            cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+            npm install
+            npm ci
+            npm run typecheck
+            npm run lint
+            npm run test:ci
+            npm run build
+          shell: bash
+
+      # - name: Change Directory
+      #   run: cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+      # - name: Install dependencies
+      #   run: npm install
+      # - name: Install dependencies (using npm ci)
+      #   run: npm ci
+      # - name: Check types
+      #   run: npm run typecheck
+      # - name: Lint
+      #   run: npm run lint
+      # - name: Unit tests
+      #   run: npm run test:ci
+      # - name: Build frontend
+      #   run: npm run build
 
       - name: Check for backend
         id: check-for-backend
