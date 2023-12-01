@@ -77,17 +77,16 @@ jobs:
 
       - name: Install Mage
         run: |
-          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
           go get -u -d github.com/magefile/mage
           cd $HOME/go/src/github.com/magefile/mage
           go run bootstrap.go
-          export PATH="$PATH:$HOME/go/bin"
-
+          export PATH="$HOME/go/bin:$PATH"
+  
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
         run: |
-          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
-          mage -v build:linux
+            mage -v build:linux
+        working-directory: ${{ github.workspace }}/dfe-azurecostbackend-datasource
 
       - name: Check for E2E
         id: check-for-e2e
