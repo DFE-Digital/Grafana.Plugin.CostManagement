@@ -1,10 +1,10 @@
-    name: Manual Test
+name: Manual Test
 
-    on:
-        workflow_dispatch
+on:
+    workflow_dispatch:
 
-    jobs:
-        do-something:
-            runs-on: ubuntu-latest
-            steps:
-                - run: echo "Hello I have been triggered Manually"
+jobs:
+    do-something:
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "Hello I have been triggered Manually"
