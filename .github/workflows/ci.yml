@@ -16,9 +16,23 @@ jobs:
     steps:
       - run: echo ${GITHUB_WORKSPACE}
       - uses: actions/checkout@v3
+      - name: Find and Change Directory
+        run: |
+          # Find the directory
+          DIRECTORY=$(find . -type d -name "dfe-azurecostbackend-datasource" -print -quit)
+          
+          # Check if directory exists
+          if [ -n "$DIRECTORY" ]; then
+            echo "Directory found: $DIRECTORY"
+            cd $DIRECTORY
+          else
+            echo "Directory not found"
+            exit 1
+          fi
+          
       - name: Setup Node.js environment
         run: |
-          cd Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+          # Continue with your Node.js setup and npm install steps here
           nvm install 20.9.0
           nvm use 20.9.0
           npm install
