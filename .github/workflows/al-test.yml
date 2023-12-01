@@ -1,0 +1,17 @@
+name: 'Test by Al'
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  al-test:
+    name: 'Test by Al'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Say Hello
+      run: echo "Al says hello"
