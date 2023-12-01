@@ -30,8 +30,7 @@ jobs:
           fi
 
       - name: Change Directory
-        #run: cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
-        run: cd /home/runner/work/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+        run: cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
       - name: Install dependencies
         run: npm install
       - name: Install dependencies (using npm ci)
