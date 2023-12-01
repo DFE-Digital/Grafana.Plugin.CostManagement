@@ -22,28 +22,35 @@ jobs:
           DIRECTORY=$(find . -type d -name "dfe-azurecostbackend-datasource" -print -quit)
           if [ -n "$DIRECTORY" ]; then
             echo "Directory found: $DIRECTORY"
-            cd $DIRECTORY
-            pwd
+            echo "::set-output name=directory::$DIRECTORY"
           else
             echo "Directory not found"
             exit 1
           fi
 
-      - name: Change Directory
-        run: cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
       - name: Install dependencies
         run: npm install
+        working-directory: ${{ steps.find-and-change-directory.outputs.directory }}
+
       - name: Install dependencies (using npm ci)
         run: npm ci
+        working-directory: ${{ steps.find-and-change-directory.outputs.directory }}
+
       - name: Check types
         run: npm run typecheck
+        working-directory: ${{ steps.find-and-change-directory.outputs.directory }}
+
       - name: Lint
         run: npm run lint
+        working-directory: ${{ steps.find-and-change-directory.outputs.directory }}
+
       - name: Unit tests
         run: npm run test:ci
+        working-directory: ${{ steps.find-and-change-directory.outputs.directory }}
+
       - name: Build frontend
         run: npm run build
-
+        working-directory: ${{ steps.find-and-change-directory.outputs.directory }}
       - name: Check for backend
         id: check-for-backend
         run: |
