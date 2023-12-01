@@ -78,10 +78,10 @@ jobs:
       - name: Install Mage
         run: |
           go install github.com/magefile/mage@latest
-          export PATH="$HOME/go/bin:$PATH"
+          export PATH="${HOME}/go/bin:${PATH}"
         env:
-          GO111MODULE: on
-          GOPATH: $HOME/go
+          GO111MODULE: "on"
+          GOPATH: "${HOME}/go"
   
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
