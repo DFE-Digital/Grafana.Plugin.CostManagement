@@ -29,8 +29,10 @@ jobs:
             exit 1
           fi
 
-          - name: Install dependencies and run npm commands
-          run: |
+      - name: Change Directory
+        run: cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource  
+      - name: Install dependencies and run npm commands
+        run: |
             cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
             npm install
             npm ci
@@ -38,10 +40,9 @@ jobs:
             npm run lint
             npm run test:ci
             npm run build
-          shell: bash
+        shell: bash
 
-      # - name: Change Directory
-      #   run: cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+      
       # - name: Install dependencies
       #   run: npm install
       # - name: Install dependencies (using npm ci)
