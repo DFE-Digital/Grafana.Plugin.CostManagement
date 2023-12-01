@@ -77,10 +77,13 @@ jobs:
 
       - name: Test backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        uses: magefile/mage-action@v2
-        with:
-          version: latest
-          args: coverage
+        run: |
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+          mage -v build:linux
+        # uses: magefile/mage-action@v2
+        # with:
+        #   version: latest
+        #   args: coverage
 
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
