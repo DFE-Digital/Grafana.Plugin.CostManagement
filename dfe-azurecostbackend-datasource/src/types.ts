@@ -28,3 +28,4 @@ export interface MySecureJsonData {
 	SubscriptionID?:           string;
 	Region?:                   string;
 }
+
