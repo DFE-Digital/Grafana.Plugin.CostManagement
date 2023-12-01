@@ -79,6 +79,7 @@ jobs:
         run: |
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
           go get -u -d github.com/magefile/mage
+          export PATH="$PATH:/home/runner/go/bin"
           go run github.com/magefile/mage
 
       - name: Build backend
