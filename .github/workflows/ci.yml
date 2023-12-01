@@ -65,8 +65,7 @@ jobs:
       - name: Check for backend
         id: check-for-backend
         run: |
-          if [ -f "Magefile.go" ]
-          then
+          if [ -f "/home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/Magefile.go" ]; then
             echo "has-backend=true" >> $GITHUB_OUTPUT
           fi
 
