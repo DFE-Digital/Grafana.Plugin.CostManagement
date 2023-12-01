@@ -28,6 +28,8 @@ jobs:
             exit 1
           fi
 
+      - name: Change Directory
+        run: cd Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
       - name: Install dependencies
         run: npm install
       - name: Install dependencies (using npm ci)
