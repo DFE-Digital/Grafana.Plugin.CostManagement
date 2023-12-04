@@ -106,7 +106,7 @@ jobs:
           fi
 
       - name: Sign plugin
-        run: npx @grafana/sign-plugin@latest --rootUrls http://localhost:3000/
+        run: npx @grafana/sign-plugin@latest --rootUrls https://dev.develop-child-family-social-work-career.education.gov.uk/grafana,https://test.develop-child-family-social-work-career.education.gov.uk/grafana,https://pre-prod.develop-child-family-social-work-career.education.gov.uk/grafana,https://develop-child-family-social-work-career.education.gov.uk/grafana,https://www.dev.develop-child-family-social-work-career.education.gov.uk/grafana,https://www.test.develop-child-family-social-work-career.education.gov.uk/grafana,https://www.pre-prod.develop-child-family-social-work-career.education.gov.uk/grafana,https://www.develop-child-family-social-work-career.education.gov.uk/grafana
         # if: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata
