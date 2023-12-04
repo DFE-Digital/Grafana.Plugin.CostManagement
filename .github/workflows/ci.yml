@@ -48,20 +48,6 @@ jobs:
             npm run build
         shell: bash
 
-      
-      # - name: Install dependencies
-      #   run: npm install
-      # - name: Install dependencies (using npm ci)
-      #   run: npm ci
-      # - name: Check types
-      #   run: npm run typecheck
-      # - name: Lint
-      #   run: npm run lint
-      # - name: Unit tests
-      #   run: npm run test:ci
-      # - name: Build frontend
-      #   run: npm run build
-
       - name: Check for backend
         id: check-for-backend
         run: |
@@ -80,20 +66,9 @@ jobs:
       - name: Install Mage
         run: |
           git clone https://github.com/magefile/mage
-          pwd
           cd mage
-          pwd
-          ls -a
-          go run /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/mage/bootstrap.go
+          go run bootstrap.go
 
-        # run: |
-        #   go install github.com/magefile/mage@latest
-        #   export PATH="${HOME}/go/bin:${PATH}"
-        #   echo $GOMODCACHE
-        # env:
-        #   GO111MODULE: "on"
-        #   GOPATH: "${HOME}/go"
-  
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
         run: |
