@@ -15,7 +15,6 @@ jobs:
       # GRAFANA_ACCESS_POLICY_TOKEN: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}
     steps:
       - run: echo ${GITHUB_WORKSPACE}
-      - run: echo ${GRAFANA_ACCESS_POLICY_TOKEN}
       - uses: actions/checkout@v3
 
       # - name: Change Directory
@@ -95,20 +94,20 @@ jobs:
       #   run: |
       #     echo Please generate a Grafana access policy token: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token
       #     echo Once done please follow the instructions found here: https://github.com/${{github.repository}}/blob/main/README.md#using-github-actions-release-workflow
-      #   # if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN == '' }}
+      #   # if: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN == '' }}
 
       - name: Check Token and Show Message
         run: |
-          if [ -z "$GRAFANA_ACCESS_POLICY_TOKEN" ]; then
+          if [ -z "${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}" ]; then
             echo "Error: GRAFANA_ACCESS_POLICY_TOKEN is empty. Please set the secret in GitHub. Please generate a Grafana access policy token: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token"
             exit 1
           else
-            echo "GRAFANA_ACCESS_POLICY_TOKEN is set: $GRAFANA_ACCESS_POLICY_TOKEN"
+            echo "GRAFANA_ACCESS_POLICY_TOKEN is set: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN }}"
           fi
 
       - name: Sign plugin
         run: npx @grafana/sign-plugin@latest --rootUrls http://localhost:3000/
-        # if: ${{ env.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
+        # if: ${{ secrets.GRAFANA_ACCESS_POLICY_TOKEN != '' }}
 
       - name: Get plugin metadata
         id: metadata
