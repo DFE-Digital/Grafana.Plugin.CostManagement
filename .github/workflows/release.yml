@@ -36,7 +36,7 @@ jobs:
         with:
           node-version: '20.9.0'
           cache: 'npm'
-          cache-dependency-path: /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/package-lock.json
+          cache-dependency-path: /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/
 
 
       - name: Setup Go environment
