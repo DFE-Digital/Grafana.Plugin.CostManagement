@@ -78,8 +78,10 @@ jobs:
       - name: Install Mage
         run: |
           git clone https://github.com/magefile/mage
-           cd mage
-           go run boostrap.go
+          pwd
+          cd mage
+          pwd
+          go run boostrap.go
 
         # run: |
         #   go install github.com/magefile/mage@latest
