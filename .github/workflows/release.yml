@@ -138,11 +138,14 @@ jobs:
       #     echo "path=release_notes.md" >> $GITHUB_OUTPUT
 
       - name: Check package version
-        run: if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
+        run: |
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+          if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
 
       - name: Package plugin
         id: package-plugin
         run: |
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
           mv dist ${{ steps.metadata.outputs.plugin-id }}
           zip ${{ steps.metadata.outputs.archive }} ${{ steps.metadata.outputs.plugin-id }} -r
           md5sum ${{ steps.metadata.outputs.archive }} > ${{ steps.metadata.outputs.archive-checksum }}
