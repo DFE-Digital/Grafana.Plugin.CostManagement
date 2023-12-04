@@ -12,3 +12,4 @@ export class DataSource extends DataSourceWithBackend<MyQuery, MyDataSourceOptio
     return DEFAULT_QUERY
   }
 }
+

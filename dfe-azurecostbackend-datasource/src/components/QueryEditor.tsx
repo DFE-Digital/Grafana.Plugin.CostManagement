@@ -30,3 +30,4 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
     </div>
   );
 }
+
