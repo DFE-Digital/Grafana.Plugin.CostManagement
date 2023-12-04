@@ -133,6 +133,19 @@ jobs:
 
           echo "github-tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
+          echo "GRAFANA_PLUGIN_ID: $GRAFANA_PLUGIN_ID"
+          echo "GRAFANA_PLUGIN_VERSION: $GRAFANA_PLUGIN_VERSION"
+          echo "GRAFANA_PLUGIN_TYPE: $GRAFANA_PLUGIN_TYPE"
+          echo "GRAFANA_PLUGIN_ARTIFACT: $GRAFANA_PLUGIN_ARTIFACT"
+          echo "GRAFANA_PLUGIN_ARTIFACT_CHECKSUM: $GRAFANA_PLUGIN_ARTIFACT_CHECKSUM"
+          echo "github-tag: ${GITHUB_REF#refs/*/}"
+          echo "::set-output name=GRAFANA_PLUGIN_ID::$GRAFANA_PLUGIN_ID"
+          echo "::set-output name=GRAFANA_PLUGIN_VERSION::$GRAFANA_PLUGIN_VERSION"
+          echo "::set-output name=GRAFANA_PLUGIN_TYPE::$GRAFANA_PLUGIN_TYPE"
+          echo "::set-output name=GRAFANA_PLUGIN_ARTIFACT::$GRAFANA_PLUGIN_ARTIFACT"
+          echo "::set-output name=GRAFANA_PLUGIN_ARTIFACT_CHECKSUM::$GRAFANA_PLUGIN_ARTIFACT_CHECKSUM"
+          echo "::set-output name=github-tag::${GITHUB_REF#refs/*/}"
+
       # - name: Read changelog
       #   id: changelog
       #   run: |
