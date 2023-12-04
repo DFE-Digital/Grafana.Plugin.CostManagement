@@ -59,7 +59,9 @@ jobs:
       
 
       - name: Build and test frontend
-        run: npm run build
+        run: |
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+          npm run build
 
       # - name: Check for backend
       #   id: check-for-backend
