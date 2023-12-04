@@ -77,11 +77,17 @@ jobs:
 
       - name: Install Mage
         run: |
-          go install github.com/magefile/mage@latest
-          export PATH="${HOME}/go/bin:${PATH}"
-        env:
-          GO111MODULE: "on"
-          GOPATH: "${HOME}/go"
+          git clone https://github.com/magefile/mage
+           cd mage
+           go run boostrap.go
+
+        # run: |
+        #   go install github.com/magefile/mage@latest
+        #   export PATH="${HOME}/go/bin:${PATH}"
+        #   echo $GOMODCACHE
+        # env:
+        #   GO111MODULE: "on"
+        #   GOPATH: "${HOME}/go"
   
       - name: Build backend
         if: steps.check-for-backend.outputs.has-backend == 'true'
