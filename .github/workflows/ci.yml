@@ -83,7 +83,7 @@ jobs:
           pwd
           cd mage
           pwd
-          go run boostrap.go
+          go run /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/mage/boostrap.go
 
         # run: |
         #   go install github.com/magefile/mage@latest
