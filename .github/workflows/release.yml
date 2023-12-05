@@ -92,7 +92,9 @@ jobs:
 
       - name: Run Go unit tests
         if: steps.check-for-backend.outputs.has-backend == 'true'
-        run: go test /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/pkg/plugin
+        run: |
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+          go test /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/pkg/plugin
         ##working-directory: /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
 
       # - name: Warn missing Grafana access policy token
