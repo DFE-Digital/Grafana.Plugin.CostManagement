@@ -75,6 +75,12 @@ jobs:
             mage -v build:linux
         working-directory: ${{ github.workspace }}/dfe-azurecostbackend-datasource
 
+      - name: Run Go unit tests
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        run: |
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+          go test /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/pkg/plugin
+
       - name: Check for E2E
         id: check-for-e2e
         run: |
