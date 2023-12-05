@@ -166,15 +166,24 @@ jobs:
           cp -f ./${{ steps.metadata.outputs.archive }} ${{ github.workspace }}/releases/
           cp -f ./${{ steps.metadata.outputs.archive-checksum }} ${{ github.workspace }}/releases/
 
-      - name: Commit Zip to Repo
+      - name: Create and Push New Branch
         run: |
-          # Commit the changes to the repository
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          version="${{ steps.metadata.outputs.plugin-version }}"
+          branch_name="auto-release-${version}"
+          git checkout -b "$branch_name"
           git add ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive }}
           git add ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive-checksum }}
-          git commit -m "Add plugin zip file"
-          git push
+          git commit -m "Add plugin zip file - ${version}"
+          git push origin "$branch_name"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: "Add plugin zip file"
+          branch: "$branch_name"
+          base: main
 
       - name: Create Github release
         uses: softprops/action-gh-release@v1
