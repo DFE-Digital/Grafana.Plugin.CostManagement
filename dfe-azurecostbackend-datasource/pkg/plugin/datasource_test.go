@@ -121,7 +121,7 @@ func TestGetCosts(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error marshalling response: %v", err)
 	}
-
+	
 	// Create a new instance of the httptest.Server struct
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Check the request method and URL
