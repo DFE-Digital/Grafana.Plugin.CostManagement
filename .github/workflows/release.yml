@@ -180,7 +180,7 @@ jobs:
           go install
           popd
           pwd
-          plugincheck2 -config ./plugin-validator/config/default.yaml ${{ steps.metadata.outputs.archive }}
+          plugincheck2 -config ./plugin-validator/config/default.yaml  /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/${{ steps.metadata.outputs.archive }}
 
       - name: Create Github release
         uses: softprops/action-gh-release@v1
