@@ -90,6 +90,11 @@ jobs:
             mage -v build:linux
         working-directory: ${{ github.workspace }}/dfe-azurecostbackend-datasource
 
+      - name: Run Go unit tests
+        if: steps.check-for-backend.outputs.has-backend == 'true'
+        run: go test ./...
+        working-directory: /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+
       # - name: Warn missing Grafana access policy token
       #   run: |
       #     echo Please generate a Grafana access policy token: https://grafana.com/developers/plugin-tools/publish-a-plugin/sign-a-plugin#generate-an-access-policy-token
