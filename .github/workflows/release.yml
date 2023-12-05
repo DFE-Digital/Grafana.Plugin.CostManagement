@@ -177,14 +177,12 @@ jobs:
           git add ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive-checksum }}
           git commit -m "Add plugin zip file - ${version}"
           git push origin "$branch_name"
-        env:
-          BRANCH_NAME: ${{ steps.create-branch.outputs.branch_name }}
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
           commit-message: "Add plugin zip file"
-          branch: "${{ env.BRANCH_NAME }}"
+          branch: "auto-release-${{ steps.metadata.outputs.plugin-version }}"
           base: main
 
       - name: Create Github release
