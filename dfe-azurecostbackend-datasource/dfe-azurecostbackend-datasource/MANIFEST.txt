@@ -1,0 +1,45 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "private",
+  "signedByOrg": "martinbelton",
+  "signedByOrgName": "martinbelton",
+  "rootUrls": [
+    "https://dev.develop-child-family-social-work-career.education.gov.uk/grafana",
+    "https://test.develop-child-family-social-work-career.education.gov.uk/grafana",
+    "https://pre-prod.develop-child-family-social-work-career.education.gov.uk/grafana",
+    "https://develop-child-family-social-work-career.education.gov.uk/grafana",
+    "https://www.dev.develop-child-family-social-work-career.education.gov.uk/grafana",
+    "https://www.test.develop-child-family-social-work-career.education.gov.uk/grafana",
+    "https://www.pre-prod.develop-child-family-social-work-career.education.gov.uk/grafana",
+    "https://www.develop-child-family-social-work-career.education.gov.uk/grafana"
+  ],
+  "plugin": "dfe-azurecostbackend-datasource",
+  "version": "1.0.0",
+  "time": 1701792294121,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "CHANGELOG.md": "aaa78be4710ef41d56ddab1edbd180ef9f9adfea2f293109aae925dc33a1b9b3",
+    "LICENSE": "c5accbbd8546e94c34aed24afe689a617627d18eed5a6c48277e48db57c23851",
+    "module.js": "2e532001e6a5fb7b6945af85c4f9e9744127d5e4d12da091dcafd215f93414c8",
+    "gpx_azurecost_backend_linux_amd64": "afaabe3fe1cd8019d56ab71f2b548aa2be0e878c71c73b0cbe426fbad6c98c84",
+    "README.md": "773b70d6df742332c82ddef99c2713db91d405a25fd3f47575fa6a4d92b0220d",
+    "img/logo.svg": "1defc6f7e585c67657bcfd8fddc599ee7dfa82f8674413f49fa274c2cd453ec6",
+    "plugin.json": "b6860244384a5a32405f6061ff1b1c4b8a6d786407d4e08aae26f83c664baf4e",
+    "module.js.map": "70e407c052a734861dc6a1bc17555d006394f24c19cda061e6eb15ac97f4dd7c"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.10
+Comment: https://openpgpjs.org
+
+wrcEARMKAAYFAmVvSiYAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm54CNAgYh336VHMbwqMAHZdK6XfXfXOMQQKvuIi1XBbfO0FsXu6LgU4r2
+PZV72XRSFKoGmia9ae7S8hhCmp22QvabVrk1RAIGI1I4wPdQoae/n095jXKK
+CLNE5ws6tyAUlg85Z3zS5jKZ+nRQgpsaXQe0F0sMOueeSQWtCpOpSQ9H8Maf
+ijRRl4o=
+=NsbQ
+-----END PGP SIGNATURE-----
