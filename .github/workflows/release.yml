@@ -161,6 +161,8 @@ jobs:
           plugincheck2 -config ./plugin-validator/config/default.yaml  /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/${{ steps.metadata.outputs.archive }}
           # Copy the zip file to the releases folder in github.workspace
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
+          mkdir -p ${{ github.workspace }}/releases
+          ls
           cp -f ./${{ steps.metadata.outputs.archive }} ${{ github.workspace }}/releases/
           cp -f ./${{ steps.metadata.outputs.archive-checksum }} ${{ github.workspace }}/releases/
 
