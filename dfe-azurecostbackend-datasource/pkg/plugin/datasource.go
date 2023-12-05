@@ -380,6 +380,9 @@ func getCosts(token string, config Config) (CostResponse, error) {
 	}
 
 	requestURL := config.AzureCostSubscriptionUrl + url
+	if(len(config.TokenURL) > 1){
+		requestURL = config.TokenURL
+	}
 	req, err := http.NewRequest("POST", requestURL, bytes.NewBuffer(body))
 	if err != nil {
 		return CostResponse{}, fmt.Errorf("Error creating HTTP request: %v", err)
