@@ -167,17 +167,20 @@ jobs:
           cd ${{ github.workspace }}/releases/
           ls
 
-      # - name: Create and Push New Branch
-      #   run: |
-      #     git config --local user.email "action@github.com"
-      #     git config --local user.name "GitHub Action"
-      #     version="${{ steps.metadata.outputs.plugin-version }}"
-      #     branch_name="auto-release-${version}"
-      #     git checkout -b "$branch_name"
-      #     git add ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive }}
-      #     git add ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive-checksum }}
-      #     git commit -m "Add plugin zip file - ${version}"
-      #     git push origin "$branch_name"
+      - name: Create and Push New Branch
+        run: |
+          cd ${{ github.workspace }}
+          pwd
+          ls
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          version="${{ steps.metadata.outputs.plugin-version }}"
+          branch_name="auto-release-${version}"
+          git checkout -b "$branch_name"
+          git add ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive }}
+          git add ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive-checksum }}
+          git commit -m "Add plugin zip file - ${version}"
+          git push origin "$branch_name"
 
       # - name: Create Pull Request
       #   uses: peter-evans/create-pull-request@v3
