@@ -168,19 +168,30 @@ jobs:
           ls
 
       - name: Create GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        uses: svenstaro/upload-release-action@v2
         with:
-          tag_name: "test"
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}/releases/${{ steps.metadata.outputs.archive }}
+          asset_name: "Grafana Cost Plugin"
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Grafann Cost Plugin"
+        
+        
+          # id: create_release
+        # uses: actions/create-release@v1
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        # with:
+        #   tag_name: "${{ steps.metadata.outputs.plugin-version }}"
+        #   release_name: Release ${{ github.ref }}
+        #   body: |
+        #     Changes in this Release
+        #     - First Change
+        #     - Second Change
+        #   draft: false
+        #   prerelease: false
+        #   asset_path: ${{ github.workspace }}/releases
       # - name: Semantic Release
       #   uses: cycjimmy/semantic-release-action@v2
       #   with:
