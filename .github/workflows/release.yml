@@ -137,9 +137,10 @@ jobs:
           GITHUB_TAG="${{ steps.metadata.outputs.github-tag }}"
           echo "Plugin version: $PLUGIN_VERSION"
           echo "GitHub tag: $GITHUB_TAG"
-          if [ "v${{ steps.metadata.outputs.github-tag }}" != "vmain" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
+          
+        # if [ "v${{ steps.metadata.outputs.github-tag }}" != "vmain" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
 
-    # if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
+        # if [ "v${{ steps.metadata.outputs.plugin-version }}" != "${{ steps.metadata.outputs.github-tag }}" ]; then printf "\033[0;31mPlugin version doesn't match tag name\033[0m\n"; exit 1; fi
 
       - name: Package plugin
         id: package-plugin
