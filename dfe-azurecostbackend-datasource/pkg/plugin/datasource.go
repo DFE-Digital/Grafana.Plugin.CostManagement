@@ -243,6 +243,9 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 	// // Add fields for "time" and "values"
 	timeField := data.NewField("time", nil, make([]time.Time, len(datepoints)))
 	valuesField := data.NewField("values", nil, make([]float64, len(datepoints)))
+	sumField := data.NewField("sum-values", nil, make([]float64, len(datepoints)))
+
+	rollingTotal := 0.0
 
 	// Populate the fields with DatePoint values
 	for i, dp := range datepoints {
@@ -252,12 +255,16 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 			fmt.Println("Error parsing date:", err)
 			continue
 		}
+
+		rollingTotal = rollingTotal + dp.Value
+
 		timeField.Set(i, date)
 		valuesField.Set(i, dp.Value)
+		sumField.Set(i, rollingTotal)
 	}
 
 	// Add fields to the frame
-	frame.Fields = append(frame.Fields, timeField, valuesField)
+	frame.Fields = append(frame.Fields, timeField, valuesField, sumField)
 
 	// add the frames to the response.
 	response.Frames = append(response.Frames, frame)
@@ -380,7 +387,7 @@ func getCosts(token string, config Config) (CostResponse, error) {
 	}
 
 	requestURL := config.AzureCostSubscriptionUrl + url
-	if(len(config.TokenURL) > 1){
+	if len(config.TokenURL) > 1 {
 		requestURL = config.TokenURL
 	}
 	req, err := http.NewRequest("POST", requestURL, bytes.NewBuffer(body))
