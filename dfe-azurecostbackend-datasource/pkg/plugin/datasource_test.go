@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 	"encoding/json"
 	"reflect"
 
@@ -143,7 +144,8 @@ func TestGetCosts(t *testing.T) {
 	// Call the getCosts function with the mock token and config
 	token := "your-mock-token"
 	config.TokenURL = server.URL
-	costs, err := getCosts(token, config)
+	start, end := getCurrentYearDates()
+	costs, err := getCosts(token, config, start, end)
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
 	}
@@ -187,3 +189,31 @@ func createMockCostResponse() CostResponse {
 
 	return costResponse
 }
+
+var timeNow = time.Now
+
+func TestGetCurrentYearDates(t *testing.T) {
+	// Mock current date for testing
+	mockDate := time.Date(2023, time.January, 15, 0, 0, 0, 0, time.UTC)
+	// Save the original time function and replace it with a mock
+	originalTimeNow := timeNow
+	timeNow = func() time.Time { return mockDate }
+	defer func() { timeNow = originalTimeNow }()
+
+	// Call the function to get the formatted dates
+	firstOfJanuary, thirtyFirstOfDecember := getCurrentYearDates()
+
+	// Expected results for the mock date
+	expectedFirstOfJanuary := "2023-01-01"
+	expectedThirtyFirstOfDecember := "2023-12-31"
+
+	// Check if the actual results match the expected results
+	if firstOfJanuary != expectedFirstOfJanuary {
+		t.Errorf("First of January: expected %s, got %s", expectedFirstOfJanuary, firstOfJanuary)
+	}
+
+	if thirtyFirstOfDecember != expectedThirtyFirstOfDecember {
+		t.Errorf("Thirty-First of December: expected %s, got %s", expectedThirtyFirstOfDecember, thirtyFirstOfDecember)
+	}
+}
+
