@@ -225,7 +225,15 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 	// Use the token as needed
 	log.Println("Fetched token:", token)
 
-	costs, err := getCosts(token, d.config)
+	start, end := getCurrentYearDates()
+
+	timeRange := query.TimeRange
+	if !timeRange.From.IsZero() && !timeRange.To.IsZero(){
+		start = timeRange.From.Format("2006-01-02")
+    	end = timeRange.To.Format("2006-01-02")
+	}
+
+	costs, err := getCosts(token, d.config, start, end)
 	if err != nil {
 		log.Println("Error getting costs:", err)
 		return response
@@ -365,11 +373,16 @@ func parseAccessToken(body []byte) (string, error) {
 }
 
 // Fetch Costs
-func getCosts(token string, config Config) (CostResponse, error) {
+func getCosts(token string, config Config, start string, end string) (CostResponse, error) {
 	url := config.SubscriptionID + "/providers/Microsoft.CostManagement/query?api-version=2023-03-01"
+
 	bodyParameters := map[string]interface{}{
 		"type":      "Usage",
-		"timeframe": "MonthToDate",
+		"timeframe": "Custom",
+		"timeperiod": map[string]string{
+			"from": start,
+			"to":   end,
+		},
 		"dataset": map[string]interface{}{
 			"granularity": "Daily",
 			"aggregation": map[string]interface{}{
@@ -468,3 +481,19 @@ func convertToStandardDateFormat(inputDate string) (string, error) {
 	fmt.Println("Invalid date format. Expected YYYYMMDD.")
 	return inputDate, fmt.Errorf("Invalid date format. Expected YYYYMMDD.")
 }
+
+func getCurrentYearDates() (string, string) {
+	// Get the current year
+	currentYear := time.Now().Year()
+
+	// Get the 1st of January of the current year
+	firstOfJanuary := time.Date(currentYear, time.January, 1, 0, 0, 0, 0, time.UTC)
+	firstOfJanuaryFormatted := firstOfJanuary.Format("2006-01-02")
+
+	// Get the 31st of December of the current year
+	thirtyFirstOfDecember := time.Date(currentYear, time.December, 31, 0, 0, 0, 0, time.UTC)
+	thirtyFirstOfDecemberFormatted := thirtyFirstOfDecember.Format("2006-01-02")
+
+	return firstOfJanuaryFormatted, thirtyFirstOfDecemberFormatted
+}
+
