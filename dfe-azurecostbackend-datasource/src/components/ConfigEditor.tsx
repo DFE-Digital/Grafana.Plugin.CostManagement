@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { InlineField, SecretInput } from '@grafana/ui';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
 import { MyDataSourceOptions, MySecureJsonData } from '../types';
@@ -8,13 +8,16 @@ interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions> 
 export function ConfigEditor(props: Props) {
   const { onOptionsChange, options } = props;
 
-  const onPasswordKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onOptionsChange({
-      ...options,
-      secureJsonData: {
-        Password: event.target.value,
-      },
-    });
+  const onPasswordKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' || event.type === 'blur') {
+      // Save the value on Enter key press
+      onOptionsChange({
+        ...options,
+        secureJsonData: {
+          Password: (event.target as HTMLInputElement).value,
+        },
+      });
+    }
   };
 
   const onResetPasswordKey = () => {
@@ -31,13 +34,16 @@ export function ConfigEditor(props: Props) {
     });
   };
 
-  const onClientIDKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onOptionsChange({
-      ...options,
-      secureJsonData: {
-        ClientID: event.target.value,
-      },
-    });
+  const onClientIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' || event.type === 'blur') {
+      // Save the value on Enter key press
+      onOptionsChange({
+        ...options,
+        secureJsonData: {
+          ClientID: (event.target as HTMLInputElement).value,
+        },
+      });
+    }
   };
 
   const onResetClientIDKey = () => {
@@ -54,13 +60,16 @@ export function ConfigEditor(props: Props) {
     });
   };
 
-  const onTenantIDKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onOptionsChange({
-      ...options,
-      secureJsonData: {
-        TenantID: event.target.value,
-      },
-    });
+  const onTenantIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' || event.type === 'blur') {
+      // Save the value on Enter key press
+      onOptionsChange({
+        ...options,
+        secureJsonData: {
+          TenantID: (event.target as HTMLInputElement).value,
+        },
+      });
+    }
   };
 
   const onResetTenantIDKey = () => {
@@ -77,13 +86,16 @@ export function ConfigEditor(props: Props) {
     });
   };
 
-  const onSubscriptionIDKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onOptionsChange({
-      ...options,
-      secureJsonData: {
-        SubscriptionID: event.target.value,
-      },
-    });
+  const onSubscriptionIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' || event.type === 'blur') {
+      // Save the value on Enter key press
+      onOptionsChange({
+        ...options,
+        secureJsonData: {
+          SubscriptionID: (event.target as HTMLInputElement).value,
+        },
+      });
+    }
   };
 
   const onResetSubscriptionIDKey = () => {
@@ -100,13 +112,16 @@ export function ConfigEditor(props: Props) {
     });
   };
 
-  const onRegionKeyChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onOptionsChange({
-      ...options,
-      secureJsonData: {
-        Region: event.target.value,
-      },
-    });
+  const onRegionKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' || event.type === 'blur') {
+      // Save the value on Enter key press
+      onOptionsChange({
+        ...options,
+        secureJsonData: {
+          Region: (event.target as HTMLInputElement).value,
+        },
+      });
+    }
   };
 
   const onResetRegionKey = () => {
