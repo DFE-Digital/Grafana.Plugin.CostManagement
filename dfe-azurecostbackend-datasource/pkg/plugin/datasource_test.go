@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 	"time"
 	"encoding/json"
@@ -145,7 +146,7 @@ func TestGetCosts(t *testing.T) {
 	token := "your-mock-token"
 	config.TokenURL = server.URL
 	start, end := getCurrentYearDates()
-	costs, err := getCosts(token, config, start, end)
+	costs, err := getCosts(token, config, start, end, "resourceid")
 	if err != nil {
 		t.Errorf("Expected no error, got %v", err)
 	}
@@ -204,8 +205,8 @@ func TestGetCurrentYearDates(t *testing.T) {
 	firstOfJanuary, thirtyFirstOfDecember := getCurrentYearDates()
 
 	// Expected results for the mock date
-	expectedFirstOfJanuary := "2023-01-01"
-	expectedThirtyFirstOfDecember := "2023-12-31"
+	expectedFirstOfJanuary := strconv.Itoa(time.Now().Year()) +  "-01-01"
+	expectedThirtyFirstOfDecember := strconv.Itoa(time.Now().Year()) + "-12-31"
 
 	// Check if the actual results match the expected results
 	if firstOfJanuary != expectedFirstOfJanuary {
@@ -216,4 +217,3 @@ func TestGetCurrentYearDates(t *testing.T) {
 		t.Errorf("Thirty-First of December: expected %s, got %s", expectedThirtyFirstOfDecember, thirtyFirstOfDecember)
 	}
 }
-

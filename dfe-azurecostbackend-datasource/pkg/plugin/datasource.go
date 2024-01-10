@@ -193,7 +193,10 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 	return response, nil
 }
 
-type queryModel struct{}
+type queryModel struct {
+	QueryText string `json:"queryText"`
+	Constant  float64  `json:"constant"`
+}
 
 func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query backend.DataQuery) backend.DataResponse {
 	var response backend.DataResponse
@@ -214,6 +217,7 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 	//MAB Added
 	log.Print("Starting Datasource")
 	log.Println("URL:", d.config.AzureCostSubscriptionUrl)
+	log.Println("ResourceId:", qm.QueryText)
 
 	// Call the fetchToken function
 	token, err := fetchToken(d.config)
@@ -228,12 +232,12 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 	start, end := getCurrentYearDates()
 
 	timeRange := query.TimeRange
-	if !timeRange.From.IsZero() && !timeRange.To.IsZero(){
+	if !timeRange.From.IsZero() && !timeRange.To.IsZero() {
 		start = timeRange.From.Format("2006-01-02")
-    	end = timeRange.To.Format("2006-01-02")
+		end = timeRange.To.Format("2006-01-02")
 	}
 
-	costs, err := getCosts(token, d.config, start, end)
+	costs, err := getCosts(token, d.config, start, end, qm.QueryText)
 	if err != nil {
 		log.Println("Error getting costs:", err)
 		return response
@@ -373,8 +377,14 @@ func parseAccessToken(body []byte) (string, error) {
 }
 
 // Fetch Costs
-func getCosts(token string, config Config, start string, end string) (CostResponse, error) {
+func getCosts(token string, config Config, start string, end string, resourceid string) (CostResponse, error) {
 	url := config.SubscriptionID + "/providers/Microsoft.CostManagement/query?api-version=2023-03-01"
+
+	if len(resourceid) > 2 {
+		url = config.SubscriptionID + "/resourceGroups/" + resourceid + "/providers/Microsoft.CostManagement/query?api-version=2023-03-01"
+	}
+
+	log.Println("CostUrl:", url)
 
 	bodyParameters := map[string]interface{}{
 		"type":      "Usage",
@@ -496,4 +506,3 @@ func getCurrentYearDates() (string, string) {
 
 	return firstOfJanuaryFormatted, thirtyFirstOfDecemberFormatted
 }
-

@@ -9,6 +9,8 @@ type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 export function QueryEditor({ query, onChange, onRunQuery }: Props) {
   const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange({ ...query, queryText: event.target.value });
+    // executes the query
+    onRunQuery();
   };
 
   const onConstantChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -21,10 +23,13 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
 
   return (
     <div className="gf-form">
-      <InlineField label="Constant">
-        <Input onChange={onConstantChange} value={constant} width={8} type="number" step="0.1" />
-      </InlineField>
-      <InlineField label="Query Text" labelWidth={16} tooltip="Not used yet">
+      {false && (
+        <InlineField label="Constant">
+          <Input onChange={onConstantChange} value={constant} width={8} type="number" step="0.1" />
+        </InlineField>
+      )}
+      
+      <InlineField label="Azure Reource Id" labelWidth={26} tooltip="Reource Id">
         <Input onChange={onQueryTextChange} value={queryText || ''} />
       </InlineField>
     </div>

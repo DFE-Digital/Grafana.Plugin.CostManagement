@@ -9,15 +9,12 @@ export function ConfigEditor(props: Props) {
   const { onOptionsChange, options } = props;
 
   const onPasswordKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           Password: (event.target as HTMLInputElement).value,
         },
       });
-    }
   };
 
   const onResetPasswordKey = () => {
@@ -35,15 +32,12 @@ export function ConfigEditor(props: Props) {
   };
 
   const onClientIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           ClientID: (event.target as HTMLInputElement).value,
         },
       });
-    }
   };
 
   const onResetClientIDKey = () => {
@@ -61,15 +55,12 @@ export function ConfigEditor(props: Props) {
   };
 
   const onTenantIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           TenantID: (event.target as HTMLInputElement).value,
         },
       });
-    }
   };
 
   const onResetTenantIDKey = () => {
@@ -87,15 +78,12 @@ export function ConfigEditor(props: Props) {
   };
 
   const onSubscriptionIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           SubscriptionID: (event.target as HTMLInputElement).value,
         },
       });
-    }
   };
 
   const onResetSubscriptionIDKey = () => {
@@ -113,15 +101,12 @@ export function ConfigEditor(props: Props) {
   };
 
   const onRegionKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           Region: (event.target as HTMLInputElement).value,
         },
       });
-    }
   };
 
   const onResetRegionKey = () => {
