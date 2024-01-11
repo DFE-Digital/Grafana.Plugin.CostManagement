@@ -1,7 +1,7 @@
 {
   "id": "1",
   "name": "azurecost-backend",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Azure cost backend",
   "scripts": {
     "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",

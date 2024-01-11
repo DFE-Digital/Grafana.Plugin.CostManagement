@@ -9,17 +9,27 @@ export function ConfigEditor(props: Props) {
   const { onOptionsChange, options } = props;
 
   const onPasswordKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           Password: (event.target as HTMLInputElement).value,
         },
       });
-    }
   };
 
+  const onPasswordBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updatePassword(event.target.value);
+  };
+
+  const updatePassword = (newPassword: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        Password: newPassword,
+      },
+    });
+  };
+  
   const onResetPasswordKey = () => {
     onOptionsChange({
       ...options,
@@ -35,15 +45,25 @@ export function ConfigEditor(props: Props) {
   };
 
   const onClientIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           ClientID: (event.target as HTMLInputElement).value,
         },
       });
-    }
+  };
+
+  const onClientIDKeyBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updateonClientIDKey(event.target.value);
+  };
+  
+  const updateonClientIDKey = (itemupdate: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        ClientID: itemupdate,
+      },
+    });
   };
 
   const onResetClientIDKey = () => {
@@ -61,15 +81,25 @@ export function ConfigEditor(props: Props) {
   };
 
   const onTenantIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           TenantID: (event.target as HTMLInputElement).value,
         },
       });
-    }
+  };
+
+  const onTenantIDKeyBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updateonTenantIDKey(event.target.value);
+  };
+  
+  const updateonTenantIDKey = (itemupdate: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        TenantID: itemupdate,
+      },
+    });
   };
 
   const onResetTenantIDKey = () => {
@@ -87,15 +117,25 @@ export function ConfigEditor(props: Props) {
   };
 
   const onSubscriptionIDKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           SubscriptionID: (event.target as HTMLInputElement).value,
         },
       });
-    }
+  };
+
+  const onSubscriptionIDKeyBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updateonSubscriptionIDKey(event.target.value);
+  };
+  
+  const updateonSubscriptionIDKey = (itemupdate: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        SubscriptionID: itemupdate,
+      },
+    });
   };
 
   const onResetSubscriptionIDKey = () => {
@@ -113,15 +153,12 @@ export function ConfigEditor(props: Props) {
   };
 
   const onRegionKeyChange = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' || event.type === 'blur') {
-      // Save the value on Enter key press
       onOptionsChange({
         ...options,
         secureJsonData: {
           Region: (event.target as HTMLInputElement).value,
         },
       });
-    }
   };
 
   const onResetRegionKey = () => {
@@ -153,6 +190,7 @@ export function ConfigEditor(props: Props) {
           width={100}
           onReset={onResetPasswordKey}
           onChange={onPasswordKeyChange}
+          onBlur={onPasswordBlur}
         />
       </InlineField>
       <InlineField label="ClientID" labelWidth={12}>
@@ -163,6 +201,7 @@ export function ConfigEditor(props: Props) {
           width={100}
           onReset={onResetClientIDKey}
           onChange={onClientIDKeyChange}
+          onBlur={onClientIDKeyBlur}
         />
       </InlineField>
       <InlineField label="TenantID" labelWidth={12}>
@@ -173,6 +212,7 @@ export function ConfigEditor(props: Props) {
           width={60}
           onReset={onResetTenantIDKey}
           onChange={onTenantIDKeyChange}
+          onBlur={onTenantIDKeyBlur}
         />
       </InlineField>
       <InlineField label="SubscriptionID" labelWidth={17}>
@@ -183,6 +223,7 @@ export function ConfigEditor(props: Props) {
           width={100}
           onReset={onResetSubscriptionIDKey}
           onChange={onSubscriptionIDKeyChange}
+          onBlur={onSubscriptionIDKeyBlur}
         />
       </InlineField>
       <InlineField label="Region" labelWidth={12}>
