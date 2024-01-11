@@ -17,6 +17,19 @@ export function ConfigEditor(props: Props) {
       });
   };
 
+  const onPasswordBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updatePassword(event.target.value);
+  };
+
+  const updatePassword = (newPassword: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        Password: newPassword,
+      },
+    });
+  };
+  
   const onResetPasswordKey = () => {
     onOptionsChange({
       ...options,
@@ -38,6 +51,19 @@ export function ConfigEditor(props: Props) {
           ClientID: (event.target as HTMLInputElement).value,
         },
       });
+  };
+
+  const onClientIDKeyBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updateonClientIDKey(event.target.value);
+  };
+  
+  const updateonClientIDKey = (itemupdate: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        ClientID: itemupdate,
+      },
+    });
   };
 
   const onResetClientIDKey = () => {
@@ -63,6 +89,19 @@ export function ConfigEditor(props: Props) {
       });
   };
 
+  const onTenantIDKeyBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updateonTenantIDKey(event.target.value);
+  };
+  
+  const updateonTenantIDKey = (itemupdate: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        TenantID: itemupdate,
+      },
+    });
+  };
+
   const onResetTenantIDKey = () => {
     onOptionsChange({
       ...options,
@@ -84,6 +123,19 @@ export function ConfigEditor(props: Props) {
           SubscriptionID: (event.target as HTMLInputElement).value,
         },
       });
+  };
+
+  const onSubscriptionIDKeyBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    updateonSubscriptionIDKey(event.target.value);
+  };
+  
+  const updateonSubscriptionIDKey = (itemupdate: string) => {
+    onOptionsChange({
+      ...options,
+      secureJsonData: {
+        SubscriptionID: itemupdate,
+      },
+    });
   };
 
   const onResetSubscriptionIDKey = () => {
@@ -138,6 +190,7 @@ export function ConfigEditor(props: Props) {
           width={100}
           onReset={onResetPasswordKey}
           onChange={onPasswordKeyChange}
+          onBlur={onPasswordBlur}
         />
       </InlineField>
       <InlineField label="ClientID" labelWidth={12}>
@@ -148,6 +201,7 @@ export function ConfigEditor(props: Props) {
           width={100}
           onReset={onResetClientIDKey}
           onChange={onClientIDKeyChange}
+          onBlur={onClientIDKeyBlur}
         />
       </InlineField>
       <InlineField label="TenantID" labelWidth={12}>
@@ -158,6 +212,7 @@ export function ConfigEditor(props: Props) {
           width={60}
           onReset={onResetTenantIDKey}
           onChange={onTenantIDKeyChange}
+          onBlur={onTenantIDKeyBlur}
         />
       </InlineField>
       <InlineField label="SubscriptionID" labelWidth={17}>
@@ -168,6 +223,7 @@ export function ConfigEditor(props: Props) {
           width={100}
           onReset={onResetSubscriptionIDKey}
           onChange={onSubscriptionIDKeyChange}
+          onBlur={onSubscriptionIDKeyBlur}
         />
       </InlineField>
       <InlineField label="Region" labelWidth={12}>
