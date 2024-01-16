@@ -7,7 +7,7 @@ FROM grafana/${grafana_image}:${grafana_version}
 USER root
 
 # Copy your plugin files into the Grafana plugins directory
-COPY dfe-azurecostbackend-datasource-v2 /var/lib/grafana/plugins/dfe-azurecostbackend-datasource-v2
+COPY dfe-azurecostbackend-datasource /var/lib/grafana/plugins/dfe-azurecostbackend-datasource
 
 # Set permissions for the plugin directory
-RUN chown -R 472:472 /var/lib/grafana/plugins/dfe-azurecostbackend-datasource-v2
+RUN chown -R 472:472 /var/lib/grafana/plugins/dfe-azurecostbackend-datasource
