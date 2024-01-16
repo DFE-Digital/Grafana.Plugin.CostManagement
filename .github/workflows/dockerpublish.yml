@@ -83,6 +83,7 @@ jobs:
         uses: pozetroninc/github-action-get-latest-release@master
         with:
           repository: DFE-Digital/Grafana.Plugin.CostManagement
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Unzip Plugin
         run: unzip -o ${{ steps.costplugin.outputs.download_path }} -d ./dfe-azurecostbackend-datasource-v2
