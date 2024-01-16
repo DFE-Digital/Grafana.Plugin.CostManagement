@@ -92,7 +92,7 @@ jobs:
         #  retry-times: 3
           
       - name: Unzip Plugin
-        run: unzip -o ${{ steps.downloadfile.outputs.download_path }} #-d ./dfe-azurecostbackend-datasource-1.0.3.zip
+        run: unzip dfe-azurecostbackend-datasource-1.0.3.zip
         
 
       # Build and push Docker image with Buildx (don't push on PR)
