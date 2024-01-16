@@ -80,7 +80,10 @@ jobs:
 
       - name: Fetch Plugin
         id: downloadfile  # Remember to give an ID if you need the output
-        run:  wget https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip
+        run: |
+          wget --header="Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
+
+
         #uses: suisei-cn/actions-download-file@v1.4.0
         #with:
         #  url: "https://github.com/DFE-Digital/Grafana.Plugin.CostManagement/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
