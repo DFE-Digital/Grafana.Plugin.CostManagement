@@ -79,14 +79,17 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
       - name: Fetch Plugin
-        id: costplugin
-        uses: pozetroninc/github-action-get-latest-release@master
+        id: downloadfile  # Remember to give an ID if you need the output
+        uses: suisei-cn/actions-download-file@v1.4.0
         with:
-          repository: DFE-Digital/Grafana.Plugin.CostManagement
-          token: ${{ secrets.GITHUB_TOKEN }}
-
+          url: "https://github.com/DFE-Digital/Grafana.Plugin.CostManagement/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
+          target: public/
+          auto-match: true
+          retry-times: 3
+          
       - name: Unzip Plugin
-        run: unzip -o ${{ steps.costplugin.outputs.download_path }} -d ./dfe-azurecostbackend-datasource-v2
+        run: unzip -o ${{ steps.downloadfile.outputs.download_path }} -d ./dfe-azurecostbackend-datasource
+
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
