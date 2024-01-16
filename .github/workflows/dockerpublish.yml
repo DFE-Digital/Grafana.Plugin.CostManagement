@@ -86,7 +86,6 @@ jobs:
           target: public/
           auto-match: true
           retry-times: 3
-
           
       - name: Unzip Plugin
         run: unzip -o ${{ steps.downloadfile.outputs.download_path }} -d ./dfe-azurecostbackend-datasource
