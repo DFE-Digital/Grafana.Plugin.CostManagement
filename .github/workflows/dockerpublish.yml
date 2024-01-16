@@ -80,12 +80,13 @@ jobs:
 
       - name: Fetch Plugin
         id: downloadfile  # Remember to give an ID if you need the output
-        uses: suisei-cn/actions-download-file@v1.4.0
-        with:
-          url: "https://github.com/DFE-Digital/Grafana.Plugin.CostManagement/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
-          target: public/
-          auto-match: true
-          retry-times: 3
+        run:  wget https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip
+        #uses: suisei-cn/actions-download-file@v1.4.0
+        #with:
+        #  url: "https://github.com/DFE-Digital/Grafana.Plugin.CostManagement/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
+        #  target: public/
+        #  auto-match: true
+        #  retry-times: 3
           
       - name: Unzip Plugin
         run: unzip -o ${{ steps.downloadfile.outputs.download_path }} -d ./dfe-azurecostbackend-datasource
