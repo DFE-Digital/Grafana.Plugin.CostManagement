@@ -85,7 +85,7 @@ jobs:
         run: |
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
           unzip -o dfe-azurecostbackend-datasource-1.0.3.zip
-          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin/latest-cost-plugin/dfe-azurecostbackend-datasource
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin/dfe-azurecostbackend-datasource
           pwd
           ls
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement
