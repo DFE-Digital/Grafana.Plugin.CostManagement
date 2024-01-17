@@ -79,12 +79,12 @@ jobs:
         run: |
           mkdir latest-cost-plugin
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
-          wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
+          wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.4.zip"
           
       - name: Unzip Plugin
         run: |
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
-          unzip -o dfe-azurecostbackend-datasource-1.0.3.zip
+          unzip -o dfe-azurecostbackend-datasource-1.0.4.zip
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin/dfe-azurecostbackend-datasource
           pwd
           ls
