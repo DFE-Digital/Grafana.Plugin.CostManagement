@@ -78,16 +78,13 @@ jobs:
         id: downloadfile  # Remember to give an ID if you need the output
         run: |
           mkdir latest-cost-plugin
-          cd latest-cost-plugin
-          latest_version=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
-          echo "Latest Version: $latest_version"
-          wget "https://github.com/${{ github.repository }}/releases/download/${latest_version}/dfe-azurecostbackend-datasource-${latest_version}.zip"
-
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
+          wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
           
       - name: Unzip Plugin
         run: |
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
-          unzip -o "dfe-azurecostbackend-datasource-${{ steps.downloadfile.outputs.latest_version }}.zip"
+          unzip -o dfe-azurecostbackend-datasource-1.0.3.zip
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin/latest-cost-plugin/dfe-azurecostbackend-datasource
           pwd
           ls
