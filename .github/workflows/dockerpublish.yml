@@ -77,13 +77,17 @@ jobs:
       - name: Fetch Plugin
         id: downloadfile  # Remember to give an ID if you need the output
         run: |
+          mkdir latest-cost-plugin
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
           wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
           
       - name: Unzip Plugin
         run: |
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
+          unzip -o dfe-azurecostbackend-datasource-1.0.3.zip
           pwd
           ls
-          unzip -o dfe-azurecostbackend-datasource-1.0.3.zip
+          cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement
         
 
       # Build and push Docker image with Buildx (don't push on PR)
