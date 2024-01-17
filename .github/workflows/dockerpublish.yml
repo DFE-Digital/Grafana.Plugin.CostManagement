@@ -78,17 +78,12 @@ jobs:
         id: downloadfile  # Remember to give an ID if you need the output
         run: |
           wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
-
-
-        #uses: suisei-cn/actions-download-file@v1.4.0
-        #with:
-        #  url: "https://github.com/DFE-Digital/Grafana.Plugin.CostManagement/releases/download/main/dfe-azurecostbackend-datasource-1.0.3.zip"
-        #  target: public/
-        #  auto-match: true
-        #  retry-times: 3
           
       - name: Unzip Plugin
-        run: unzip -o dfe-azurecostbackend-datasource-1.0.3.zip
+        run: |
+          pwd
+          ls
+          unzip -o dfe-azurecostbackend-datasource-1.0.3.zip
         
 
       # Build and push Docker image with Buildx (don't push on PR)
