@@ -79,13 +79,13 @@ jobs:
         run: |
           mkdir latest-cost-plugin
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
-          wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.5.zip"
+          wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.6.zip"
           wget "https://grafana.com/api/plugins/blackcowmoo-googleanalytics-datasource/versions/0.2.3/download"
           
       - name: Unzip Plugin
         run: |
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
-          unzip -o dfe-azurecostbackend-datasource-1.0.5.zip
+          unzip -o dfe-azurecostbackend-datasource-1.0.6.zip
           unzip -o blackcowmoo-googleanalytics-datasource-0.2.3.zip
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin/dfe-azurecostbackend-datasource
           pwd
