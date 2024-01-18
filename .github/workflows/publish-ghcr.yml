@@ -26,6 +26,7 @@ jobs:
         cd grafana-cost-plugin
         wget "https://github.com/DFE-Digital/Grafana.Plugin.CostManagement/releases/download/main/dfe-azurecostbackend-datasource-1.0.6.zip"
         wget "https://grafana.com/api/plugins/blackcowmoo-googleanalytics-datasource/versions/0.2.3/download"
+        ls
         unzip -o dfe-azurecostbackend-datasource-1.0.6.zip
         unzip -o blackcowmoo-googleanalytics-datasource-0.2.3.zip
         cd ..
