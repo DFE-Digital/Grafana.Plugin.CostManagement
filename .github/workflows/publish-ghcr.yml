@@ -1,0 +1,51 @@
+name: Build and Push Grafana Docker Image
+
+on:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+  RELEASE_TAG: ${{ github.event.release.tag_name }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Download Grafana Plugin
+      run: |
+        mkdir -p grafana-cost-plugin
+        cd grafana-cost-plugin
+        wget "https://github.com/DFE-Digital/Grafana.Plugin.CostManagement/releases/download/main/dfe-azurecostbackend-datasource-1.0.6.zip"
+        wget "https://grafana.com/api/plugins/blackcowmoo-googleanalytics-datasource/versions/0.2.3/download"
+        unzip -o dfe-azurecostbackend-datasource-1.0.6.zip
+        unzip -o blackcowmoo-googleanalytics-datasource-0.2.3.zip
+        cd ..
+
+    # Login against a Docker registry except on PR
+    # https://github.com/docker/login-action
+    - name: Log into registry ${{ env.REGISTRY }}
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build Docker Image
+      run: |
+        docker build -t ${{ env.REGISTRY }}/DFE-Digital/Grafana.Plugin.CostManagement-azurecost:latest       
+        docker push ${{ env.REGISTRY }}/DFE-Digital/Grafana.Plugin.CostManagement-azurecost:latest
+
+    env:
+      DOCKER_BUILDKIT: 1
+      DOCKER_CLI_ACI: 1
+
