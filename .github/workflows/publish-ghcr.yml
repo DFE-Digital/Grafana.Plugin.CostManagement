@@ -43,8 +43,8 @@ jobs:
 
     - name: Build Docker Image
       run: |
-        docker build . "${{ env.REGISTRY }}/DFE-Digital/Grafana.Plugin.CostManagement-azurecost:latest"
-        docker push "${{ env.REGISTRY }}/DFE-Digital/Grafana.Plugin.CostManagement-azurecost:latest"
+        docker docker build . -t ghcr.io/DFE-Digital/grafana-azurecostplugin-grafana:latest
+        docker push ghcr.io/DFE-Digital/grafana-azurecostplugin-grafana:latest
 
     env:
       DOCKER_BUILDKIT: 1
