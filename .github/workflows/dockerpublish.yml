@@ -102,7 +102,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.PLUGIN_VERSION }} # was this ${{ env.IMAGE_TAGS }}
+          tags: ghcr.io/dfe-digital/grafana.plugin.costmanagement:${{ env.PLUGIN_VERSION }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             VCSREF=${{ env.sha_short }}
