@@ -16,6 +16,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   RELEASE_TAG: ${{ github.event.release.tag_name }}
+  PLUGIN_VERSION: 1.0.7
 
 jobs:
   build:
@@ -79,13 +80,13 @@ jobs:
         run: |
           mkdir latest-cost-plugin
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
-          wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-1.0.7.zip"
+          wget "https://github.com/${{ github.repository }}/releases/download/main/dfe-azurecostbackend-datasource-${{ env.PLUGIN_VERSION }}.zip"
           wget "https://grafana.com/api/plugins/blackcowmoo-googleanalytics-datasource/versions/0.2.3/download" -O blackcowmoo-googleanalytics-datasource-0.2.3.zip
           
       - name: Unzip Plugin
         run: |
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin
-          unzip -o dfe-azurecostbackend-datasource-1.0.7.zip
+          unzip -o dfe-azurecostbackend-datasource-${{ env.PLUGIN_VERSION }}.zip
           unzip -o blackcowmoo-googleanalytics-datasource-0.2.3.zip
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/latest-cost-plugin/dfe-azurecostbackend-datasource
           pwd
@@ -101,7 +102,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.IMAGE_TAGS }}
+          tags: ghcr.io/dfe-digital/grafana.plugin.costmanagement:${{ env.PLUGIN_VERSION }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             VCSREF=${{ env.sha_short }}
