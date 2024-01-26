@@ -67,11 +67,6 @@ jobs:
           file_path="/home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/dist/plugin.json"
           cat "$file_path"
 
-      - name: Stop Workflow After Showing json
-        if: always()  # Change this condition as needed
-        run: echo "Stopping workflow after After Showing json"
-        
-
       - name: Check for backend
         id: check-for-backend
         run: |
