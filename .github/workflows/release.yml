@@ -43,11 +43,37 @@ jobs:
           npm run build
         shell: bash
       
-
       - name: Build and test frontend
         run: |
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource
           npm run build
+
+      - name: Install jq
+        run: sudo apt-get install jq
+  
+      - name: Read existing plugin.json
+        run: |
+            file_path="/home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/dfe-azurecostbackend-datasource/dist/plugin.json"
+            existing_json=$(cat "$file_path")
+            echo "Existing JSON:"
+            echo "$existing_json"
+  
+      - name: Add alerting is true to plugin.json
+        run: |
+            new_json=$(echo "$existing_json" | jq '. + { "alerting": true }')
+            echo "Modified JSON:"
+            echo "$new_json"
+  
+      - name: Save modified JSON back to the file
+        run: echo "$new_json" > "$file_path"
+  
+      - name: Display modified JSON
+        run: cat "$file_path"
+
+      - name: Stop Workflow After Showing json
+        if: always()  # Change this condition as needed
+        run: echo "Stopping workflow after After Showing json"
+        
 
       - name: Check for backend
         id: check-for-backend
