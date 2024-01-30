@@ -194,8 +194,8 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 }
 
 type queryModel struct {
-	QueryText string `json:"queryText"`
-	Constant  float64  `json:"constant"`
+	QueryText string  `json:"queryText"`
+	Constant  float64 `json:"constant"`
 }
 
 func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query backend.DataQuery) backend.DataResponse {
@@ -251,6 +251,13 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 	}
 
 	log.Printf("Datapoint count: %d", len(datepoints))
+
+	//Double Time range
+	//originalDuration := timeRange.To.Sub(timeRange.From)
+	//doubledDuration := originalDuration * 2
+	//timeRange.To = timeRange.From.Add(doubledDuration)
+	//start = timeRange.From.Format("2006-01-02")
+	//end = timeRange.To.Format("2006-01-02")
 
 	// // Add fields for "time" and "values"
 	timeField := data.NewField("time", nil, make([]time.Time, len(datepoints)))
@@ -505,4 +512,112 @@ func getCurrentYearDates() (string, string) {
 	thirtyFirstOfDecemberFormatted := thirtyFirstOfDecember.Format("2006-01-02")
 
 	return firstOfJanuaryFormatted, thirtyFirstOfDecemberFormatted
+}
+
+/// Forcast functions
+
+func parseDate(dateString string) time.Time {
+	layout := "02/01/2006 15:04"
+	date, err := time.Parse(layout, dateString)
+	if err != nil {
+		panic(err)
+	}
+	return date
+}
+
+func linearRegressionCalculation(x, y []float64) (float64, float64) {
+	n := len(x)
+	sumX := sum(x)
+	sumY := sum(y)
+	sumXY := sumProduct(x, y)
+	sumXSquare := sumSquare(x)
+
+	m := (float64(n)*sumXY - sumX*sumY) / (float64(n)*sumXSquare - sumX*sumX)
+	c := (sumY - m*sumX) / float64(n)
+
+	return m, c
+}
+
+func sum(values []float64) float64 {
+	sum := 0.0
+	for _, v := range values {
+		sum += v
+	}
+	return sum
+}
+
+func sumProduct(x, y []float64) float64 {
+	sum := 0.0
+	for i := range x {
+		sum += x[i] * y[i]
+	}
+	return sum
+}
+
+func sumSquare(values []float64) float64 {
+	sum := 0.0
+	for _, v := range values {
+		sum += v * v
+	}
+	return sum
+}
+
+func getCalculatedCostData(timeRange backend.TimeRange, datapoints []DatePoint) ([]string, []float64, []float64) {
+
+	var dates []float64
+	var values []float64
+	var totalvalues []float64
+
+	var calcDates []string
+	var calcValues []float64
+	var calcTotalvalues []float64
+
+	//var newDataPoints []DatePoint
+	//var sumDataPoints []DatePoint
+
+	count := 0.0
+	rollingTotal := 0.0
+	for _, data := range datapoints {
+		rollingTotal = rollingTotal + data.Value
+		days := count
+		dates = append(dates, days)
+		values = append(values, data.Value)
+		totalvalues = append(totalvalues, rollingTotal)
+		count++
+	}
+
+	m, c := linearRegressionCalculation(dates, values)
+	m1, c1 := linearRegressionCalculation(dates, totalvalues)
+
+	// Double Time range
+	originalDuration := timeRange.To.Sub(timeRange.From)
+	doubledDuration := originalDuration * 2
+	timeRange.To = timeRange.From.Add(doubledDuration)
+
+	itemcount := int(count * 2)
+	for i := 0; i < itemcount; i++ {
+		y := m*float64(i) + c
+		y1 := m1*float64(i) + c1
+		newDate := timeRange.From.AddDate(0, 0, i)
+		stringDate := newDate.Format("2006-01-02")
+
+		calcDates = append(calcDates, stringDate)
+		calcValues = append(calcValues, y)
+		calcTotalvalues = append(calcTotalvalues, y1)
+
+		// Create a new DatePoint instance and append to newDataPoints
+		//newDataPoint := DatePoint{
+		//	Date:  stringDate,
+		//	Value: y,
+		//}
+		//newDataPoints = append(newDataPoints, newDataPoint)
+
+		//sumDataPoint := DatePoint{
+		//	Date:  stringDate,
+		//	Value: y1,
+		//}
+		//sumDataPoints = append(sumDataPoints, sumDataPoint)
+	}
+
+	return calcDates, calcValues, calcTotalvalues
 }

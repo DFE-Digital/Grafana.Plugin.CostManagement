@@ -11,6 +11,7 @@ import (
 	"reflect"
 
 	"github.com/grafana/grafana-plugin-sdk-go/backend"
+	
 )
 
 func TestQueryData(t *testing.T) {
@@ -215,5 +216,157 @@ func TestGetCurrentYearDates(t *testing.T) {
 
 	if thirtyFirstOfDecember != expectedThirtyFirstOfDecember {
 		t.Errorf("Thirty-First of December: expected %s, got %s", expectedThirtyFirstOfDecember, thirtyFirstOfDecember)
+	}
+}
+
+type CostData struct {
+	Date      time.Time
+	Cost      float64
+	TotalCost float64
+}
+
+func getCostData() []CostData {
+	costData := []CostData{
+		{Date: parseDate("30/12/2023 00:00"), Cost: 12.30, TotalCost: 12.30},
+		{Date: parseDate("31/12/2023 00:00"), Cost: 12.80, TotalCost: 25.20},
+		{Date: parseDate("01/01/2024 00:00"), Cost: 12.30, TotalCost: 37.50},
+		{Date: parseDate("02/01/2024 00:00"), Cost: 18.60, TotalCost: 56.00},
+		// ... (add the remaining data)
+		{Date: parseDate("29/01/2024 00:00"), Cost: 38.50, TotalCost: 850},
+	}
+	return costData
+}
+
+
+func TestLinearRegression(t *testing.T) {
+	costData := getCostData()
+
+	var dates []float64
+	var values []float64
+	var sumValues []float64
+
+	for _, data := range costData {
+		days := float64(data.Date.Sub(costData[0].Date).Hours() / 24)
+		dates = append(dates, days)
+		values = append(values, data.Cost)
+		sumValues = append(sumValues, data.TotalCost)
+	}
+
+	mValues, cValues := linearRegressionCalculation(dates, values)
+	mSumValues, cSumValues := linearRegressionCalculation(dates, sumValues)
+
+	// Assuming some expected values for the test
+	expectedValuesSlope := 0.867135
+	expectedValuesIntercept := 12.656628
+	expectedSumValuesSlope := 28.565974
+	expectedSumValuesIntercept := -9.475015
+
+	// Check if the calculated values are close to the expected values
+	assertClose(t, mValues, expectedValuesSlope, "values slope")
+	assertClose(t, cValues, expectedValuesIntercept, "values intercept")
+	assertClose(t, mSumValues, expectedSumValuesSlope, "sum-values slope")
+	assertClose(t, cSumValues, expectedSumValuesIntercept, "sum-values intercept")
+}
+
+func assertClose(t *testing.T, actual, expected float64, name string) {
+	t.Helper()
+	epsilon := 1e-6
+	if actual < expected-epsilon || actual > expected+epsilon {
+		t.Errorf("%s: expected %.6f, got %.6f", name, expected, actual)
+	}
+}
+
+// MockFetchToken is a mock implementation of the fetchToken function
+func MockFetchToken(config Config) (string, error) {
+	// Implement your mock logic here
+	// For example, return a predefined token and no error
+	return "mocked_token", nil
+}
+
+// Helper function to check if two slices are equal
+func slicesEqual(a, b []string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i, v := range a {
+		if v != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
+
+func TestGetCalculatedCostData(t *testing.T) {
+	timeRange := backend.TimeRange{
+		From: time.Date(2024, time.January, 1, 0, 0, 0, 0, time.UTC),
+		To:   time.Date(2024, time.January, 10, 0, 0, 0, 0, time.UTC),
+	}
+
+	datapoints := []DatePoint{
+		{Date: "2024, 01, 01", Value: 12.3},
+		{Date: "2024, 01, 02", Value: 18.6},
+		{Date: "2024, 01, 03", Value: 33.6},
+		{Date: "2024, 01, 04", Value: 29.3},
+		{Date: "2024, 01, 07", Value: 12.3},
+		{Date: "2024, 01, 06", Value: 12.3},
+		{Date: "2024, 01, 07", Value: 12.9},
+		// Add more datapoints as needed
+	}
+
+	calcDates, calcValues, calcTotalvalues := getCalculatedCostData(timeRange, datapoints)
+
+	expectedDates := []string{
+		"2024-01-01",
+		"2024-01-02",
+		"2024-01-03",
+		"2024-01-04",
+		"2024-01-05",
+		"2024-01-06",
+		"2024-01-07",
+		"2024-01-08",
+		"2024-01-09",
+		"2024-01-10",
+		"2024-01-11",
+		"2024-01-12",
+		"2024-01-13",
+		"2024-01-14",
+		
+	}
+
+	expectedValues := []float64{
+		22.19642857142856, 21.04999999999999, 19.90357142857142, 18.757142857142853, 17.610714285714288, 16.464285714285715, 15.31785714285715, 14.171428571428581, 13.025000000000013, 11.878571428571444, 10.732142857142875, 9.585714285714309, 8.43928571428574, 7.292857142857171,
+	}
+
+	expectedTotalValues := []float64{
+		18.157142857142837, 38.642857142857125, 59.12857142857142, 79.6142857142857, 100.1, 120.58571428571429, 141.07142857142858, 161.55714285714288, 182.04285714285717, 202.52857142857147, 223.01428571428576, 243.50000000000006, 263.9857142857143, 284.47142857142865,
+	}
+
+	// Compare calculated dates with expected dates
+	if !slicesEqual(calcDates, expectedDates) {
+		t.Errorf("Dates do not match. Got %v, expected %v", calcDates, expectedDates)
+	}
+
+	// Compare calculated values with expected values
+	isOK := true
+	for i := range expectedValues {
+		if calcValues[i] != expectedValues[i] {
+			isOK = false
+		}
+	}
+
+	if !isOK {
+		t.Errorf("Values do not match. Got %v, expected %v", calcValues, expectedValues)
+	}
+
+	isOK = true
+	for i := range expectedValues {
+		if calcTotalvalues[i] != expectedTotalValues[i] {
+			isOK = false
+		}
+	}
+
+	if !isOK {
+		t.Errorf("Total values do not match. Got %v, expected %v", calcTotalvalues, expectedTotalValues)
 	}
 }
