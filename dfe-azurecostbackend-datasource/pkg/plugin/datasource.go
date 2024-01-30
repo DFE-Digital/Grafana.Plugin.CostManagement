@@ -196,6 +196,7 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 type queryModel struct {
 	QueryText string  `json:"queryText"`
 	Constant  float64 `json:"constant"`
+	Forecast  bool    `json:"forecast"`
 }
 
 func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query backend.DataQuery) backend.DataResponse {
@@ -218,6 +219,7 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 	log.Print("Starting Datasource")
 	log.Println("URL:", d.config.AzureCostSubscriptionUrl)
 	log.Println("ResourceId:", qm.QueryText)
+	log.Println("Do Forecast:", qm.Forecast)
 
 	// Call the fetchToken function
 	token, err := fetchToken(d.config)
@@ -252,12 +254,36 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 
 	log.Printf("Datapoint count: %d", len(datepoints))
 
-	//Double Time range
-	//originalDuration := timeRange.To.Sub(timeRange.From)
-	//doubledDuration := originalDuration * 2
-	//timeRange.To = timeRange.From.Add(doubledDuration)
-	//start = timeRange.From.Format("2006-01-02")
-	//end = timeRange.To.Format("2006-01-02")
+	if(qm.Forecast == true){
+		// Get the calculated data
+		calcDates, calcValues, calcTotalvalues := getCalculatedCostData(timeRange, datepoints)
+
+		// // Add fields for "time" and "values"
+		timeField := data.NewField("time", nil, make([]time.Time, len(calcDates)))
+		valuesField := data.NewField("values", nil, make([]float64, len(calcDates)))
+		sumField := data.NewField("sum-values", nil, make([]float64, len(calcDates)))
+
+		for i, dp := range calcDates {
+
+			date, err := time.Parse("2006-01-02", dp)
+			if err != nil {
+				fmt.Println("Error parsing date:", err)
+				continue
+			}
+	
+			timeField.Set(i, date)
+			valuesField.Set(i, calcValues[i])
+			sumField.Set(i, calcTotalvalues[i])
+		}
+
+		// Add fields to the frame
+		frame.Fields = append(frame.Fields, timeField, valuesField, sumField)
+
+		// add the frames to the response.
+		response.Frames = append(response.Frames, frame)
+
+		return response
+	}
 
 	// // Add fields for "time" and "values"
 	timeField := data.NewField("time", nil, make([]time.Time, len(datepoints)))
