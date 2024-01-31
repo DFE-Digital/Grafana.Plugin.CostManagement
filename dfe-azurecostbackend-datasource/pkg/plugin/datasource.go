@@ -196,6 +196,7 @@ func (d *Datasource) QueryData(ctx context.Context, req *backend.QueryDataReques
 type queryModel struct {
 	QueryText string `json:"queryText"`
 	Constant  float64  `json:"constant"`
+	Forecast  bool    `json:"forecast"`
 }
 
 func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query backend.DataQuery) backend.DataResponse {
@@ -218,6 +219,7 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 	log.Print("Starting Datasource")
 	log.Println("URL:", d.config.AzureCostSubscriptionUrl)
 	log.Println("ResourceId:", qm.QueryText)
+	log.Println("Do Forecast:", qm.Forecast)
 
 	// Call the fetchToken function
 	token, err := fetchToken(d.config)
@@ -237,17 +239,40 @@ func (d *Datasource) query(_ context.Context, pCtx backend.PluginContext, query 
 		end = timeRange.To.Format("2006-01-02")
 	}
 
-	costs, err := getCosts(token, d.config, start, end, qm.QueryText)
-	if err != nil {
-		log.Println("Error getting costs:", err)
-		return response
-	}
+	var datepoints []DatePoint
 
-	//log.Printf("Costs: %+v", costs)
-	datepoints, err := convertCostsToDatePoint(costs)
-	if err != nil {
-		log.Println("Error getting costs:", err)
-		return response
+	if qm.Forecast {
+
+		costs, err := getForecast(token, d.config, start, end, qm.QueryText)
+		if err != nil {
+			log.Println("Error getting forecast:", err)
+			return response
+		}
+
+		forecastdatepoints, err := convertCostsToDatePoint(costs)
+		if err != nil {
+			log.Println("Error getting costs:", err)
+			return response
+		}
+
+		datepoints = forecastdatepoints
+
+	} else {
+
+		costs, err := getCosts(token, d.config, start, end, qm.QueryText)
+		if err != nil {
+			log.Println("Error getting costs:", err)
+			return response
+		}
+
+		costdatepoints, err := convertCostsToDatePoint(costs)
+		if err != nil {
+			log.Println("Error getting costs:", err)
+			return response
+		}
+
+		datepoints = costdatepoints
+
 	}
 
 	log.Printf("Datapoint count: %d", len(datepoints))
@@ -402,6 +427,78 @@ func getCosts(token string, config Config, start string, end string, resourceid 
 				},
 			},
 		},
+	}
+
+	body, err := json.Marshal(bodyParameters)
+	if err != nil {
+		return CostResponse{}, fmt.Errorf("Error marshalling request body: %v", err)
+	}
+
+	requestURL := config.AzureCostSubscriptionUrl + url
+	if len(config.TokenURL) > 1 {
+		requestURL = config.TokenURL
+	}
+	req, err := http.NewRequest("POST", requestURL, bytes.NewBuffer(body))
+	if err != nil {
+		return CostResponse{}, fmt.Errorf("Error creating HTTP request: %v", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Bearer "+token)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return CostResponse{}, fmt.Errorf("Error making HTTP request: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return CostResponse{}, fmt.Errorf("Error fetching cost. Status code: %d", resp.StatusCode)
+	}
+
+	responseBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return CostResponse{}, fmt.Errorf("Error reading response body: %v", err)
+	}
+
+	var costResponse CostResponse
+	err = json.Unmarshal(responseBody, &costResponse)
+	if err != nil {
+		return CostResponse{}, fmt.Errorf("Error unmarshalling response body: %v", err)
+	}
+
+	return costResponse, nil
+}
+
+// Fetch Forecast
+func getForecast(token string, config Config, start string, end string, resourceid string) (CostResponse, error) {
+	url := config.SubscriptionID + "/providers/Microsoft.CostManagement/forecast?api-version=2023-03-01"
+
+	if len(resourceid) > 2 {
+		url = config.SubscriptionID + "/resourceGroups/" + resourceid + "/providers/Microsoft.CostManagement/forecast?api-version=2023-03-01"
+	}
+
+	log.Println("ForecastUrl:", url)
+
+	bodyParameters := map[string]interface{}{
+		"type":      "Usage",
+		"timeframe": "Custom",
+		"timeperiod": map[string]string{
+			"from": start,
+			"to":   end,
+		},
+		"dataset": map[string]interface{}{
+			"granularity": "Daily",
+			"aggregation": map[string]interface{}{
+				"PreTaxCost": map[string]interface{}{
+					"name":     "PreTaxCost",
+					"function": "Sum",
+				},
+			},
+		},
+		"includeActualCost": true,
+		"includeFreshPartialCost": true,
 	}
 
 	body, err := json.Marshal(bodyParameters)

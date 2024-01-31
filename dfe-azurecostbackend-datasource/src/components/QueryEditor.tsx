@@ -1,5 +1,5 @@
-import React, { ChangeEvent } from 'react';
-import { InlineField, Input } from '@grafana/ui';
+import React, { ChangeEvent, useState } from 'react';
+import { InlineField, Input, Checkbox } from '@grafana/ui';
 import { QueryEditorProps } from '@grafana/data';
 import { DataSource } from '../datasource';
 import { MyDataSourceOptions, MyQuery } from '../types';
@@ -7,6 +7,8 @@ import { MyDataSourceOptions, MyQuery } from '../types';
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 export function QueryEditor({ query, onChange, onRunQuery }: Props) {
+  const [forecast, setForecast] = useState<boolean>(query.forecast || false);
+
   const onQueryTextChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange({ ...query, queryText: event.target.value });
     // executes the query
@@ -15,6 +17,14 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
 
   const onConstantChange = (event: ChangeEvent<HTMLInputElement>) => {
     onChange({ ...query, constant: parseFloat(event.target.value) });
+    // executes the query
+    onRunQuery();
+  };
+
+  const onForecastChange = () => {
+    const newForecast = !forecast;
+    setForecast(newForecast);
+    onChange({ ...query, forecast: newForecast });
     // executes the query
     onRunQuery();
   };
@@ -29,10 +39,13 @@ export function QueryEditor({ query, onChange, onRunQuery }: Props) {
         </InlineField>
       )}
       
-      <InlineField label="Azure Reource Id" labelWidth={26} tooltip="Reource Id">
+      <InlineField label="Azure Resource Id" labelWidth={26} tooltip="Resource Id">
         <Input onChange={onQueryTextChange} value={queryText || ''} />
+      </InlineField>
+
+      <InlineField label="Forecast">
+        <Checkbox value={forecast} onChange={onForecastChange} />
       </InlineField>
     </div>
   );
 }
-
