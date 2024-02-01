@@ -93,6 +93,12 @@ jobs:
           ls
           cd /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement
         
+      - name: Copy grafana.ini to /etc/grafana
+        run: |
+            sudo cp /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/grafana-files/grafana.ini /etc/grafana/        
+            ls -l /etc/grafana/
+            cat /etc/grafana/grafana.ini
+        shell: bash
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action

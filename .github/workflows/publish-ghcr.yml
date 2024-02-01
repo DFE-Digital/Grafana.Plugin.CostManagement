@@ -42,6 +42,13 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Copy grafana.ini to /etc/grafana
+      run: |
+          sudo cp /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/grafana-files/grafana.ini /etc/grafana/        
+          ls -l /etc/grafana/
+          cat /etc/grafana/grafana.ini
+      shell: bash
+
     - name: Build Docker Image
       run: |
         docker build . -t ghcr.io/dfe-digital/grafana-azurecostplugin-grafana:${{ env.PLUGIN_VERSION }}
