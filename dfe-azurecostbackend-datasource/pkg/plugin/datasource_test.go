@@ -163,6 +163,58 @@ func TestGetCosts(t *testing.T) {
 	}
 }
 
+func TestGetForecast(t *testing.T) {
+	// Create a new instance of the Config struct
+	config := Config{
+		SubscriptionID:            "your-subscription-id",
+		AzureCostSubscriptionUrl:  "https://your-cost-management-url.com/",
+	}
+
+	costResponse := createMockCostResponse()
+	responseJSON, err := json.Marshal(costResponse)
+	if err != nil {
+		t.Errorf("Error marshalling response: %v", err)
+	}
+	
+	// Create a new instance of the httptest.Server struct
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Check the request method and URL
+		if r.Method != "POST" {
+			t.Errorf("Expected POST request, got %s", r.Method)
+		}
+		// if r.URL.String() != "/your-subscription-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01" {
+		// 	t.Errorf("Expected URL /your-subscription-id/providers/Microsoft.CostManagement/query?api-version=2023-03-01, got %s", r.URL.String())
+		// }
+
+		// Write a mock response
+		w.WriteHeader(http.StatusOK)
+		w.Write(responseJSON)
+	}))
+
+	// Close the server when the test is done
+	defer server.Close()
+
+	// Call the getCosts function with the mock token and config
+	token := "your-mock-token"
+	config.TokenURL = server.URL
+	start, end := getCurrentYearDates()
+	costs, err := getForecast(token, config, start, end, "resourceid")
+	if err != nil {
+		t.Errorf("Expected no error, got %v", err)
+	}
+
+	id := costs.ID
+	if (id == ""){
+		t.Errorf("Expected response %v, got %v", id, costs.ID)
+	}
+
+	// Check the response
+	expected := costResponse
+	if !reflect.DeepEqual(costs, expected) {
+		t.Errorf("Expected response %v, got %v", expected, costs)
+	}
+}
+
 func createMockCostResponse() CostResponse {
 	// Define the properties of the CostResponse object
 	properties := Properties{
