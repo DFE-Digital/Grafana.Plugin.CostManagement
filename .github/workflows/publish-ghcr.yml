@@ -11,7 +11,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   RELEASE_TAG: ${{ github.event.release.tag_name }}
-  PLUGIN_VERSION: 1.0.9
+  PLUGIN_VERSION: 1.0.10
 
 jobs:
   build-and-push:
@@ -41,6 +41,13 @@ jobs:
         registry: ${{ env.REGISTRY }}
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Copy grafana.ini to /etc/grafana
+      run: |
+          sudo cp /home/runner/work/Grafana.Plugin.CostManagement/Grafana.Plugin.CostManagement/grafana-files/grafana.ini /etc/grafana/        
+          ls -l /etc/grafana/
+          cat /etc/grafana/grafana.ini
+      shell: bash
 
     - name: Build Docker Image
       run: |
