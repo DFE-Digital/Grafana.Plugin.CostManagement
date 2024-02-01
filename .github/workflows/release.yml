@@ -17,6 +17,11 @@ jobs:
       - run: echo ${GITHUB_WORKSPACE}
       - uses: actions/checkout@v3
 
+      - name: Copy grafana.ini to /etc/grafana
+        run: |
+            sudo cp ${{ github.workspace }}/Grafana.Plugin.CostManagement/grafana-files/grafana.ini /etc/grafana/
+        shell: bash
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v4
         with:
